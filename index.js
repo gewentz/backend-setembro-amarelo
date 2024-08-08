@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 const app = express();
 app.use(express.json());
 
-app.post('/send', async (req, res) => {
+app.post('https://backend-setembro-amarelo.onrender.com/send', async (req, res) => {
   const {
     q1, q2, q3, q4, q5,
     q6, q7, q8, q9, q10,
