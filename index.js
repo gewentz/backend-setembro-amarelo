@@ -1,33 +1,26 @@
 const express = require('express');
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const mongoose = require('mongoose');
+const questionarioRoute = require('./routes/questionarioRoute');
+require('dotenv').config();
 
 const app = express();
-app.use(express.json());
+const port = process.env.PORT || 3000
 
-app.post('https://backend-setembro-amarelo.onrender.com/send', async (req, res) => {
-  const {
-    q1, q2, q3, q4, q5,
-    q6, q7, q8, q9, q10,
-    q11, q12, q13, q14, q15,
-  } = req.body;
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+}));
 
-  try {
-    const resposta = await prisma.resposta.create({
-      data: {
-        q1, q2, q3, q4, q5,
-        q6, q7, q8, q9, q10,
-        q11, q12, q13, q14, q15,
-      },
-    });
-    res.status(201).json(resposta);
-  } catch (error) {
-    console.error('Erro ao salvar as respostas:', error);
-    res.status(500).json({ error: 'Erro ao salvar as respostas' });
-  }
-});
+app.use(bodyParser.json());
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
+app.use('/questionario', questionarioRoute);
+
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => console.log('Conectado ao banco de dados'))
+  .catch(err => console.log('Falha ao se conectar ao banco de dados', err));
+
+app.listen(port, () => {
+  console.log(`Servidor rodando na porta ${port}`);
 });
