@@ -9,7 +9,7 @@ const app = express();
 const port = process.env.PORT || 3000
 
 app.use(cors({
-  origin: '*',
+  origin: 'https://setembro-amarelo-eosin.vercel.app',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
 }));
 
